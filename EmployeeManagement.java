@@ -65,7 +65,7 @@ class FulltimeEmployee extends Employee{
 
     @Override
     public double calculateSalary(){
-       return this.finalSalary = getBaseSalary() + this.bonus;
+        return this.finalSalary = getBaseSalary() + this.bonus;
     }
 }
 

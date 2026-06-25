@@ -47,6 +47,26 @@ abstract class Person{
         abstract public void role();
 }
 
+
+// Exceptions
+
+class InvalidPatientException extends Exception{
+    public InvalidPatientException(String msg){
+        super(msg);
+    }
+}
+
+class InvalidDoctorException extends Exception{
+    public InvalidDoctorException(String msg){
+        super(msg);
+    }
+}
+
+class InsufficientFundsException extends Exception{
+    public InsufficientFundsException(String msg){
+        super(msg);
+    }
+}
 // Interfaces
 
 interface  Billable{
@@ -59,16 +79,16 @@ interface Payment{
     public void pay();
 }
 
-class Doctor extends Person implements Billable{
+class Doctor extends Person implements Billable {
 
     private String specialization;
     private int experience;
 
-    public Doctor(int id, String name, int age, String gender,String specialization,int experience){
+    public Doctor(int id, String name, int age, String gender,String specialization,int experience)throws InvalidDoctorException{
         super(id, name, age, gender);
 
         if(specialization == null || specialization.isBlank()){
-            throw new IllegalArgumentException("Invalid Details");
+            throw new InvalidDoctorException("Invalid Details");
         }
         else{
             this.specialization = specialization;
@@ -106,11 +126,11 @@ class Patient extends Person implements Billable{
     private String diseases;
     private int roomNumber;
 
-    public Patient(int id, String name, int age, String gender,String diseases,int roomNumber){
+    public Patient(int id, String name, int age, String gender,String diseases,int roomNumber)throws InvalidPatientException{
         super(id, name, age, gender);
 
         if(diseases == null || diseases.isBlank()){
-            throw new IllegalArgumentException("Invalid Details");
+            throw new InvalidPatientException("Invalid Details");
         }
         else{
             this.diseases = diseases;
@@ -203,20 +223,20 @@ class Hospital1{
         }
     }
 
-    public void transfer(Hospital2 to,double amount) {
+    public void transfer(Hospital2 to,double amount) throws InsufficientFundsException{
         try {
             if(amount <=0 ){
-                throw new IllegalArgumentException("Invalid Amount");
+                throw new InsufficientFundsException("Invalid Amount");
             }
 
             if(amount > this.balance){
-                throw  new IllegalArgumentException("Insufficient Balance");
+                throw  new InsufficientFundsException("Insufficient Balance");
             }
 
             this.balance -= amount;
             
         } catch (Exception e) {
-            System.out.println("Insufficient Errors Occurs");
+            throw new InsufficientFundsException("Insufficient Errors Occurs");
         }
     }
 
@@ -269,36 +289,36 @@ class Hospital2{
 
 public class HospitalManagement {
     public static void main(String[] args) {
-        
-        Person doctor = new Doctor(1,"Paul",35,"Male","Gainagologist",5);
 
-        Person patient = new Patient(5,"Abinesh",20,"Male","Hair Loss",04);
+        try {
+                    Person doctor = new Doctor(1,"Paul",35,"Male","Gainagologist",5);
 
-        doctor.displayDetails();
-        patient.displayDetails();
+                    Person patient = new Patient(5,"Abinesh",20,"Male","Hair Loss",04);
+                    
+                    doctor.displayDetails();
+                    patient.displayDetails();
 
-        doctor.role();
-        patient.role();
+                    doctor.role();
+                    patient.role();
 
-        UPI upi = new UPI();
-        upi.pay();
-        Card card = new Card();
-        card.pay();
-        Cash cash = new Cash();
-        cash.pay();
+                    UPI upi = new UPI();
+                    upi.pay();
+                    Card card = new Card();
+                    card.pay();
+                    Cash cash = new Cash();
+                    cash.pay();
 
-        Hospital1 hos1 = new Hospital1();
-        Hospital2 hos2 = new Hospital2();
+                    Hospital1 hos1 = new Hospital1();
+                    Hospital2 hos2 = new Hospital2();
 
-        System.out.println(hos1.getBalance());
-        hos1.deposit(500.00);
-        System.out.println(hos1.getBalance());
-        System.out.println(hos2.getBalance());
-        hos1.transfer(hos2 , 500.00);
-        // hos2.deposit(500.00);
-
-        
-
-            
+                    System.out.println(hos1.getBalance());
+                    hos1.deposit(500.00);
+                    System.out.println(hos1.getBalance());
+                    System.out.println(hos2.getBalance());
+                    hos1.transfer(hos2 , 500.00);
+                    // hos2.deposit(500.00);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
