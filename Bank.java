@@ -163,13 +163,13 @@ public class Bank {
             Account account1 = new Account1(5,"Abinesh",5000.00);
             account1.getAmount();
         } catch (Exception e) {
-           System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
 
         try {
             Account account2 = new Account1(6,"Ashwin",50000.00);
         } catch (Exception e) {
-           System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }
